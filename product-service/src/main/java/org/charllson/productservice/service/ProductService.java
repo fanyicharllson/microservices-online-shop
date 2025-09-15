@@ -18,7 +18,8 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public void createProduct(ProductRequest productRequest) {
-        Product product = Product.builder().name(productRequest.getName()).description(productRequest.getDescription()).price(productRequest.getPrice()).build();
+        Product product = Product.builder().name(productRequest.getName()).description(productRequest.getDescription())
+                .price(productRequest.getPrice()).build();
 
         productRepository.save(product);
         log.info("Product {} saved!", product.getId());
@@ -36,6 +37,5 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
-
 
 }
