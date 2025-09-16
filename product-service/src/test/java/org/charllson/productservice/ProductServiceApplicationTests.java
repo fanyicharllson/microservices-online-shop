@@ -49,13 +49,29 @@ class ProductServiceApplicationTests {
         ProductRequest productRequest = getProductRequest();
         String productRequestString = objectMapper.writeValueAsString(productRequest);
 
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product").contentType(MediaType.APPLICATION_JSON).content(productRequestString)).andExpect(status().isCreated());
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/product").contentType(MediaType.APPLICATION_JSON)
+                .content(productRequestString)).andExpect(status().isCreated());
 
         Assertions.assertEquals(1, productRepository.findAll().size());
     }
 
-    private ProductRequest getProductRequest() {
+    @Test
+    void shouldFailToCreateProductWithInvalidData() throws Exception {
+        ProductRequest invalideProductRequest = ProductRequest.builder()
+                .name("") // invalid pruduct name
+                .description("Techno Phone for all users")
+                .price("100.00")
+                .build();
+
+        // convert object to string        
+        String invalidProductReqString = objectMapper.writeValueAsString(invalideProductRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/product").contentType(MediaType.APPLICATION_JSON)
+                .content(invalidProductReqString)).andExpect(status().isBadRequest());
+    }
+
+    // Helper  methods
+     private ProductRequest getProductRequest() {
         return ProductRequest.builder()
                 .name("Techno Spark 10")
                 .description("Techno Phone for all users")
@@ -63,4 +79,12 @@ class ProductServiceApplicationTests {
                 .build();
     }
 
+    @SuppressWarnings("unused")
+    private ProductRequest creaProductRequest(String name, String description, String price) {
+        return ProductRequest.builder()
+        .name(name)
+        .description(description)
+        .price(price)
+        .build();
+    }
 }
