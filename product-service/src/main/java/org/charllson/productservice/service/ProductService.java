@@ -25,6 +25,7 @@ public class ProductService {
 
         productRepository.save(product);
         log.info("Product {} saved!", product.getId());
+        log.info("Just testing...");
     }
 
     public List<ProductResponse> getAllProduct() {
